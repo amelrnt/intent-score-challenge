@@ -12,7 +12,7 @@ import android.widget.EditText;
 public class ScorerActivity extends AppCompatActivity {
     private EditText ScorerName;
     private Button ScorerButton;
-    public static final String SCORER_KEY = "Upin";
+    public static final String SCORER_KEY = "upin";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

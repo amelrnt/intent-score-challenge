@@ -16,7 +16,6 @@ public class MatchActivity extends AppCompatActivity {
     private int scoreAway;
     private int scoreHome;
     public static final String WINNER_KEY="arema";
-    public static final String RESULTCODE_KEY = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,33 +44,44 @@ public class MatchActivity extends AppCompatActivity {
     //2.Tombol add score menambahkan memindah activity ke scorerActivity dimana pada scorer activity di isikan nama pencetak gol
     public void AddHomeScoreHandler(View view) {
         Intent i = new Intent(this, ScorerActivity.class);
-        i.putExtra(RESULTCODE_KEY,1);
-        startActivity(i);
+        startActivityForResult(i,1);
     }
 
 
     public void AddAwayScoreHandler(View view) {
         Intent i = new Intent(this, ScorerActivity.class);
-        i.putExtra(RESULTCODE_KEY,2);
-        startActivity(i);
+        startActivityForResult(i,2);
     }
 
     //3.Dari activity scorer akan mengirim kembali ke activity matchactivity otomatis nama pencetak gol dan skor bertambah +1
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-                if (resultCode == 1) {
+                if (requestCode == 1) {
                     // TODO Extract the data returned from the child Activity.
-                    String returnValue = data.getStringExtra("some_key"); //nama scorer
+                    //String returnValue = data.getStringExtra("some_key"); //nama scorer
                     scoreHome ++;
+                    homeScore.setText(""+scoreHome);
                 }
-                else if (resultCode == 2){
-                    String returnValue = data.getStringExtra("some_key");
-                    scoreHome++;
+                else if (requestCode == 2){
+                    //String returnValue = data.getStringExtra("some_key");
+                    scoreAway++;
+                    awayScore.setText(""+scoreAway);
                 }
     }
 
+
     //4.Tombol Cek Result menghitung pemenang dari kedua tim dan mengirim nama pemenang beserta nama pencetak gol ke ResultActivity, jika seri di kirim text "Draw",
+    public void PrintResultHandler(View view) {
+        Intent intent = new Intent(MatchActivity.this, ResultActivity.class);
+        if (scoreAway>scoreHome)
+            intent.putExtra(WINNER_KEY,tvAway.getText().toString());
+        else if(scoreHome>scoreAway)
+            intent.putExtra(WINNER_KEY,tvHome.getText().toString());
+        else
+            intent.putExtra(WINNER_KEY,"Seri");
+        startActivity(intent);
+    }
 
 
 }
