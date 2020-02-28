@@ -3,8 +3,16 @@ package id.putraprima.skorbola;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class MatchActivity extends AppCompatActivity {
+    private TextView tvHome;
+    private TextView tvAway;
+    private TextView homeScore;
+    private TextView awayScore;
+    int away;
+    int home;
+    public static final String WINNER_KEY="arema";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

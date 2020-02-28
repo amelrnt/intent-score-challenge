@@ -1,24 +1,26 @@
 package id.putraprima.skorbola;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 
 public class MainActivity extends AppCompatActivity {
     private EditText homeTeam;
     private EditText awayTeam;
-    private Button btnNext;
     public static final String HOMETEAM_KEY = "arema";
     public static final String AWAYTEAM_KEY = "persebaya";
     private static final String TAG = MainActivity.class.getCanonicalName();
@@ -72,6 +74,39 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("Bitmap", bp);
 
             startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+
+        if (requestCode == GALLERY_REQUEST_CODE) {
+            if (data != null) {
+                try {
+                    Uri imageUri = data.getData();
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    HomeLogo.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    Toast.makeText(this, "Can't load image", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }
+        if (requestCode == GALLERY_REQUEST_CODE) {
+            if (data != null) {
+                try {
+                    Uri imageUri = data.getData();
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    AwayLogo.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    Toast.makeText(this, "Can't load image", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, e.getMessage());
+                }
+            }
         }
     }
 }
