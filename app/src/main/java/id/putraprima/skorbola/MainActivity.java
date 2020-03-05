@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String AWAYTEAM_KEY = "persebaya";
     private static final String TAG = MainActivity.class.getCanonicalName();
     private static final int GALLERY_REQUEST_CODE = 1;
+    private int key = 1;
     private ImageView HomeLogo;
     private ImageView AwayLogo;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                key = 1;
                 startActivityForResult(intent, GALLERY_REQUEST_CODE);
             }
         });
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                key = 2;
                 startActivityForResult(intent, GALLERY_REQUEST_CODE);
             }
         });
@@ -71,7 +74,11 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(AWAYTEAM_KEY, away);
             HomeLogo.setDrawingCacheEnabled(true);
             Bitmap bp = HomeLogo.getDrawingCache();
-            intent.putExtra("Bitmap", bp);
+            intent.putExtra("Bitmap1", bp);
+
+            AwayLogo.setDrawingCacheEnabled(true);
+            Bitmap bp1 = HomeLogo.getDrawingCache();
+            intent.putExtra("Bitmap2", bp);
 
             startActivity(intent);
         }
@@ -85,28 +92,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (requestCode == GALLERY_REQUEST_CODE) {
+
             if (data != null) {
                 try {
                     Uri imageUri = data.getData();
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    if (key == 1)
                     HomeLogo.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    Toast.makeText(this, "Can't load image", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        }
-        if (requestCode == GALLERY_REQUEST_CODE) {
-            if (data != null) {
-                try {
-                    Uri imageUri = data.getData();
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    if (key == 2)
                     AwayLogo.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     Toast.makeText(this, "Can't load image", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, e.getMessage());
                 }
             }
+
         }
     }
 }
